@@ -1,16 +1,16 @@
-
-
 public class Movimiento implements Comparable<Movimiento> {
         int fila;
         int columna;
         int numFichas;
         char color;
+        int puntuacion;
 
-        public Movimiento(int fila, int columna, int numFichas2, char color) {
+        public Movimiento(int fila, int columna, int numFichas2, char color, int puntuacion) {
             this.fila = fila;
             this.columna = columna;
             this.numFichas = numFichas2;
             this.color = color;
+            this.puntuacion = puntuacion;
         }
 
             @Override
@@ -34,6 +34,10 @@ public class Movimiento implements Comparable<Movimiento> {
 
         public String getCoordenadas() {
             return "(" + fila + ", " + columna + ")";
+        }
+
+        public int getPuntuacion() {
+            return puntuacion;
         }
     }
 
