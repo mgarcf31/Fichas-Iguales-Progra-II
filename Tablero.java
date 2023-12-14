@@ -29,7 +29,7 @@ public class Tablero {
 
     public void invertirTablero(int filas, int columnas){
     
-        ArrayList<ArrayList<Ficha>> tableroInvertido = new ArrayList<>(columnas);
+        ArrayList<ArrayList<Ficha>> tableroInvertido = new ArrayList<>(filas);
 
         for (int i = 0; i < filas; i++) {
             ArrayList<Ficha> filaInvertida = new ArrayList<>(columnas);
@@ -43,14 +43,9 @@ public class Tablero {
         tablero = tableroInvertido;
     }
 
-    public void addFicha(Ficha ficha, int filas, int columnas){
-        tablero = new ArrayList<>(filas);
-        for(int i = 0; i < filas; i++){
-            ArrayList<Ficha> fila = new ArrayList<>(columnas);
-            for(int j = 0; j < columnas; j++){
-                fila.add(j, ficha);
-            }
-            tablero.add(i, fila);
+    public void addFicha(Ficha ficha, int fila, int columna){
+        if (fila < tablero.size() && columna < tablero.get(0).size()) {
+            tablero.get(fila).set(columna, ficha);
         }
     
     }
