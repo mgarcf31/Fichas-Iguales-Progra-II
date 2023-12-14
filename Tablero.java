@@ -68,43 +68,41 @@ public class Tablero {
     }
 
     public ArrayList<ArrayList<int[]>> getMovsPosibles() {
-        ArrayList<ArrayList<int[]>> movsPosib = new ArrayList<>();
-        boolean[][] visitado = new boolean[tablero.getFilas()][tablero.getColumnas()];
-        
-        for (int i = 0; i < tablero.getFilas(); i++) {
-            for (int j = 0; j < tablero.getColumnas(); j++) {
-                Ficha ficha = tablero.getFicha(i, j);
-                if (!visitado[i][j] && ficha.getColor() != ' ') {
-                    char color = ficha.getColor();
+        ArrayList<ArrayList<int[]>> movsPosibles = new ArrayList<>();
+        boolean[][] visitado = new boolean[tablero.size()][tablero.get(0).size()];
+
+        for (int i = 0; i < tablero.size(); i++) {
+            for (int j = 0; j < tablero.get(0).size(); j++) {
+                if (!visitado[i][j] && tablero.get(i).get(j).getColor() != ' ') {
+                    char color = tablero.get(i).get(j).getColor();
                     ArrayList<int[]> grupo = new ArrayList<>();
                     getMovsRecurs(i, j, color, visitado, grupo);
                     if (grupo.size() > 1) {
-                        movsPosib.add(grupo);
+                        movsPosibles.add(grupo);
                     }
                 }
             }
         }
-        
-        return movsPosib;
+        return movsPosibles;
     }
 
     private void getMovsRecurs(int fila, int columna, char color, boolean[][] visitado, ArrayList<int[]> grupo) {
-        if (fila < 0 || fila >= tablero.getFilas() || columna < 0 || columna >= tablero.getColumnas() || visitado[fila][columna]) {
+        if (fila < 0 || fila >= tablero.size() || columna < 0 || columna >= tablero.get(0).size() || visitado[fila][columna]) {
             return;
         }
 
-        Ficha ficha = tablero.getFicha(fila, columna);
-        if (ficha.getColor() == ' ' || ficha.getColor() != color) {
+        char fichaColor = tablero.get(fila).get(columna).getColor();
+        if (fichaColor == ' ' || fichaColor != color) {
             return;
         }
 
         visitado[fila][columna] = true;
         grupo.add(new int[] { fila, columna });
 
-        getMovsRecurs(fila - 1, columna, color, visitado, grupo); // Miro las fichas de encima
+        getMovsRecurs(fila - 1, columna, color, visitado, grupo); // miro las fichas de encima
         getMovsRecurs(fila + 1, columna, color, visitado, grupo); // "" las de abajo
         getMovsRecurs(fila, columna - 1, color, visitado, grupo); // "" las de izquierda
-        getMovsRecurs(fila, columna + 1, color, visitado, grupo); // "" las de derecha
+        getMovsRecurs(fila, columna + 1, color, visitado, grupo); // ""las de derecha
     }
 
     public void imprimirTablero() {
