@@ -7,14 +7,16 @@ public class FichasIguales {
 
     private static Tablero  tablero;
     public static int nJuegos;
+    public static int filas;
+    public static int columnas;
 
     public static void main(String[] args){
         Scanner sc = new Scanner(System.in);
         nJuegos = sc.nextInt();
         sc.nextLine();// salto el salto de linea
         for (int juego = 1; juego <= nJuegos; juego++){
-            int filas = 0;
-            int columnas = 0;
+            filas = 0;
+            columnas = 0;
             ArrayList<String> filasTablero = new ArrayList<>();
             while(true){
                 String linea = sc.nextLine();
@@ -34,6 +36,7 @@ public class FichasIguales {
             }    
         }
         sc.close();
+        tablero.invertirTablero(filas, columnas);
         tablero.imprimirTablero();
     }
 }
