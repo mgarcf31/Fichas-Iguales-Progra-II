@@ -5,13 +5,15 @@ public class Ficha {
     Boolean grupo;
     int fila;
     int columna;
+    Boolean visitado;
 
-    public Ficha (char color, char letra, boolean grupo, int fila, int columna){
+    public Ficha (char color, char letra, boolean grupo, int fila, int columna, boolean visitado){
         this.color = color;
         this.letra = letra;
         this.grupo = grupo;
         this.fila = fila;
         this.columna = columna;
+        this.visitado = visitado;
     }
     
     public Ficha (){
@@ -20,6 +22,7 @@ public class Ficha {
         this.grupo = false;
         this.fila = 0;
         this.columna = 0;
+        this.visitado = false;
     }
 
     public char getColor(){
@@ -58,8 +61,16 @@ public class Ficha {
         this.fila = fila;
     }
 
-    public void serColumna(int columna){
+    public void setColumna(int columna){
         this.columna = columna;
+    }
+
+    public void setVisitado(boolean visitado){
+        this.visitado = visitado;
+    }
+
+    public Boolean getVisitado() {
+        return visitado;
     }
 
 }
