@@ -24,7 +24,7 @@ public class FichasIguales {
             while(true){
                 String linea = sc.nextLine();
                 if (linea.isEmpty()) {
-                    break; // si hay una linea vacÃ­a salgo del while
+                    break; // si hay una linea vacÃƒÂ­a salgo del while
                 }
                 filasTablero.add(linea);
                 filas++;
@@ -45,7 +45,10 @@ public class FichasIguales {
             System.out.println("Juego " + (i + 1) + ":");
             Tablero tablero = tableros.get(i);
             tablero.invertirTablero();
-            tablero.encontrarSolucionOptima();
+            Juego juego = new Juego(tablero);
+            ArrayList<Tablero> posibilidades =  new ArrayList<Tablero>();
+            juego.resuelveTablero(tablero, posibilidades);
+            //tablero.encontrarSolucionOptima();
         }
     }
 }
