@@ -5,29 +5,28 @@ public class Juego {
     public Juego(Tablero tablero) {
     	this.tablero = tablero; 
     }
+    
     public void resuelveTablero(Tablero tablero, ArrayList<Tablero> tableros) {
         ArrayList<ArrayList<int[]>> movsPosibles = tablero.getMovsPosibles();
         for (ArrayList<int[]> movs : movsPosibles) {
-
             Tablero copiaTablero = tablero.copiarTablero();
             copiaTablero.eliminarGrupo(movs);
             copiaTablero.comprimirTablero();
 
-            if (copiaTablero.getMovsPosibles().size() == 0) {// si ya he acabado
-                // anado a lista de tableros para comparar al final
+            if (copiaTablero.getMovsPosibles().size() == 0) {
                 if (copiaTablero.getTablero().isEmpty()) {
-                    double punt = copiaTablero.calcularPuntuacionTotal(copiaTablero.getMovimientos().getListaMovimientos()); //calcuka ountuacion
+                    double punt = copiaTablero.calcularPuntuacionTotal(copiaTablero.getMovimientos().getListaMovimientos());
                     copiaTablero.setPuntuacion(punt + 1000);
                 } else {
                     copiaTablero.setPuntuacion(copiaTablero.calcularPuntuacionTotal(copiaTablero.getMovimientos().getListaMovimientos()));
                 }
                 tableros.add(copiaTablero);
-                
             } else {
                 resuelveTablero(copiaTablero, tableros);
             }
-            
         }
+        // Mover la aplicación de movimientos fuera del bucle para evitar impresiones múltiples
+        aplicarMovimientos(tablero);
     }
 	public Tablero getTablero() {
 		return tablero;
@@ -36,12 +35,14 @@ public class Juego {
 		this.tablero = tablero;
 	}
 	
-	private void aplicarMovimientos(Movimientos movimientos) {
-        for (Movimiento movimiento : movimientos.getListaMovimientos()) {
-            System.out.println("Movimiento " + movimiento.getCoordenadas() + ": eliminÃ³ " + movimiento.numFichas
-                    + " fichas de color " + movimiento.color + " y obtuvo " + movimiento.getPuntuacion() + " puntos.");
-        }
-        //System.out.println("PuntuaciÃ³n final: " + calcularPuntuacionTotal(movimientos.getListaMovimientos()) + ", quedando 0 fichas.");
-    }
+	private void aplicarMovimientos(Tablero tablero) {
+	    Movimientos movimientos = tablero.getMovimientos();
+	    for (Movimiento movimiento : movimientos.getListaMovimientos()) {
+	        System.out.println("Movimiento " + (movimiento.getCoordenadas()) + ": eliminó " + movimiento.numFichas
+	                + " fichas de color " + movimiento.color + " y obtuvo " + (movimiento.numFichas - 2)*(movimiento.numFichas - 2) + " puntos.");
+	    }
+	    System.out.println("Puntuación final: " + tablero.calcularPuntuacionTotal(movimientos.getListaMovimientos()) + ", quedando 0 fichas.");
+	}
+	
 }
 
