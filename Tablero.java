@@ -5,11 +5,35 @@ import java.util.Iterator;
 public class Tablero {
     
     private ArrayList<ArrayList<Ficha>> tablero;
+    
+
     private Ficha ficha;
     private Movimientos movimientos;
     private int filas;
     private int columnas;
+    private double puntuacion;
 
+    public Movimientos getMovimientos() {
+        return movimientos;
+    }
+
+    public void setMovimientos(Movimientos movimientos) {
+        this.movimientos = movimientos;
+    }
+    public ArrayList<ArrayList<Ficha>> getTablero() {
+        return tablero;
+    }
+
+    public void setTablero(ArrayList<ArrayList<Ficha>> tablero) {
+        this.tablero = tablero;
+    }
+    public double getPuntuacion() {
+        return puntuacion;
+    }
+
+    public void setPuntuacion(double d) {
+        this.puntuacion = d;
+    }
 
     public int getFilas() {
         return filas;
@@ -37,24 +61,25 @@ public class Tablero {
 
 
 
-    public ArrayList<ArrayList<Ficha>> copiarTablero() {
+    public Tablero copiarTablero() {
+        Tablero newtab = new Tablero(this.getFilas(), this.getColumnas());
         ArrayList<ArrayList<Ficha>> nuevoTablero = new ArrayList<ArrayList<Ficha>>();
         
-        for (int i = 0; i < filas; i++) {
+        for (int i = 0; i < this.getFilas(); i++) {
             ArrayList<Ficha> aux = new ArrayList<Ficha>();
-            for (int j = 0; j < columnas; j++) {
+            for (int j = 0; j < this.getColumnas(); j++) {
                 Ficha fichaVacia = new Ficha();
                 aux.add(fichaVacia);
             }
             nuevoTablero.add(aux);
 
         }
-        System.out.println(filas);
-        System.out.println(columnas);
+        // System.out.println(filas);
+        // System.out.println(columnas);
     
-        for (int i = 0; i < filas; i++) {
-            for (int j = 0; j < columnas; j++) {
-                Ficha fichaOriginal = tablero.get(i).get(j);
+        for (int i = 0; i < this.getFilas(); i++) {
+            for (int j = 0; j < this.getColumnas(); j++) {
+                Ficha fichaOriginal = this.getTablero().get(i).get(j);
                 Ficha nuevaFicha = new Ficha(
                     fichaOriginal.getColor(),
                     fichaOriginal.getLetra(),
@@ -66,8 +91,9 @@ public class Tablero {
                 nuevoTablero.get(i).add(j, nuevaFicha);
             }
         }
-    
-        return nuevoTablero;
+        newtab.setTablero(nuevoTablero);
+        newtab.setMovimientos(this.getMovimientos());
+        return newtab;
     }
 
     public void invertirTablero() {
@@ -106,34 +132,40 @@ public class Tablero {
         if (fila >= 0 && fila < filas && columna >= 0 && columna < columnas) {
             return tablero.get(fila).get(columna);
         } else {
-            // Devuelve una ficha especial o maneja el caso fuera de los límites según tus necesidades
+            // Devuelve una ficha especial o maneja el caso fuera de los lÃ­mites segÃºn tus necesidades
             return new Ficha(' ', ' ', false, 0, 0, false);
         }
     }
 
-    public ArrayList<ArrayList<int[]>> getMovsPosibles(ArrayList<ArrayList<Ficha>> tablero) {
+    public ArrayList<ArrayList<int[]>> getMovsPosibles() {
         ArrayList<ArrayList<int[]>> movsPosibles = new ArrayList<>();
-        int filas = tablero.size();
-        int columnas = tablero.get(0).size();
+        int filas = this.getTablero().size();
+    	if (filas == 0) {
+    	    // La lista está vacía, no hay nada que hacer
+    	    return movsPosibles ; // de momento está vacía
+    	}
+        int columnas = this.getTablero().get(0).size();
         boolean[][] visitado = new boolean[filas][columnas];
-
+        Movimientos temp =  new Movimientos();
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                if (!visitado[i][j] && tablero.get(i).get(j).getColor() != ' ') {
-                    char color = tablero.get(i).get(j).getColor();
+                if (!visitado[i][j] && this.getTablero().get(i).get(j).getColor() != ' ') {
+                    char color = this.getTablero().get(i).get(j).getColor();
                     ArrayList<int[]> grupo = new ArrayList<>();
                     getMovsRecurs(i, j, color, visitado, grupo);
                     if (grupo.size() > 1) {
                         movsPosibles.add(grupo);
+                        temp.agregarMovimiento(i, j, grupo.size(), color, 0);
                     }
                 }
             }
         }
+        this.setMovimientos(temp);
         return movsPosibles;
     }
 
     private void getMovsRecurs(int fila, int columna, char color, boolean[][] visitado, ArrayList<int[]> grupo) {
-        if (fila < 0 || fila >= filas || columna < 0 || columna >= columnas || visitado[fila][columna]) {
+        if (fila < 0 || fila >= this.filas || columna < 0 || columna >= this.columnas || visitado[fila][columna]) {
             return;
         }
 
@@ -150,17 +182,19 @@ public class Tablero {
         getMovsRecurs(fila, columna - 1, color, visitado, grupo); // "" las de izquierda
         getMovsRecurs(fila, columna + 1, color, visitado, grupo); // "" las de derecha
     }
-
+/* 
     public void encontrarSolucionOptima() {
-        List<Tablero> posibles = new List<Tablero>();
-        buscarSolucion(0, this.tablero, posibles);
+        buscarSolucion(0, this.tablero, );
     }
+*/
 
+    
+/*
     private void buscarSolucion(int puntuacionActual, ArrayList<ArrayList<Ficha>> tableroSol, List<Tablero> posiblesResultados) {
-        
+
         int puntuacionMaxima = 0;
         boolean hayMovimientos = false;
-        // Verificar si la puntuación actual supera la máxima conocida
+        // Verificar si la puntuaciÃ³n actual supera la mÃ¡xima conocida
         if (puntuacionActual > puntuacionMaxima) {
             puntuacionMaxima = puntuacionActual;
         }
@@ -169,7 +203,7 @@ public class Tablero {
         // Generar movimientos posibles
         ArrayList<ArrayList<int[]>> movsPosibles = getMovsPosibles(tableroSol);
         
-        // Verificar si no hay movimientos posibles o si la puntuación actual supera un límite
+        // Verificar si no hay movimientos posibles o si la puntuaciÃ³n actual supera un lÃ­mite
         if (movsPosibles.isEmpty() ) {
             System.out.println("vacio");
             return;
@@ -182,9 +216,9 @@ public class Tablero {
             System.out.println(cont);
             eliminarGrupo(copiaTablero, grupo);
             comprimirTablero(copiaTablero);
-                // Calcular la puntuación para el movimiento actual
+                // Calcular la puntuaciÃ³n para el movimiento actual
             int puntuacionMovimiento = (grupo.size() - 2) * (grupo.size() - 2);
-                // Llamar recursivamente con el nuevo tablero y la nueva puntuación
+                // Llamar recursivamente con el nuevo tablero y la nueva puntuaciÃ³n
                 cont++;
             buscarSolucion(puntuacionActual + puntuacionMovimiento, copiaTablero);
             imprimirTablero();
@@ -195,39 +229,78 @@ public class Tablero {
         }
     }
 
-   
-    public void eliminarGrupo(ArrayList<ArrayList<Ficha>> tablero, ArrayList<int[]> grupo) {
+   */
+    public void eliminarGrupo( ArrayList<int[]> grupo) {
         for (int[] posicion : grupo) {
             int fila = posicion[0];
             int columna = posicion[1];
     
-            // Establecer la ficha en la posición actual como una nueva ficha vacía en la copia del tablero
-            tablero.get(fila).set(columna, new Ficha());
+            // Establecer la ficha en la posiciÃ³n actual como una nueva ficha vacÃ­a en la copia del tablero
+            this.getTablero().get(fila).set(columna, new Ficha());
 
         }
     }
 
-    private static ArrayList<ArrayList<Ficha>> comprimirTablero(ArrayList<ArrayList<Ficha>> tablero) {
-        int filas = tablero.size();
-        int columnas = tablero.get(0).size();
-        ///////////////////
-        int filasborradas = tryRemoveFilaEnBlanco(tablero, filas, columnas);
-        filas = filas - filasborradas;
+    public Tablero comprimirTablero() {
+    	int filas = this.getTablero().size();
+    	if (filas == 0) {
+    	    // La lista está vacía, no hay nada que hacer
+    	    return this; // O devolver una nueva instancia de Tablero vacía, según tus necesidades
+    	}
+
+    	int columnas = this.getTablero().get(0).size();
+    	int filasborradas = tryRemoveFilaEnBlanco(this, filas, columnas);
+    	filas = filas - filasborradas;
+
+    	for (int i = 0; i < filas; i++) {
+    	    if (this.getTablero().get(i).isEmpty()) {
+    	        // La fila está vacía, no hay nada que hacer
+    	        continue;
+    	    }
+
+    	    for (int j = 0; j < columnas; j++) {
+    	        if (this.getTablero().get(i).get(j).color != ' ') {
+    	            continue;
+    	        }
+
+    	        int k = i;
+    	        // Verificar si la lista en la posición k tiene elementos antes de acceder a ellos
+    	        while (k >= 0 && this.getTablero().size() > k && this.getTablero().get(k).size() > j &&
+    	                this.getTablero().get(k).get(j) != null && this.getTablero().get(k).get(j).getColor() == ' ') {
+    	            k--;
+    	        }
+
+    	        if (k >= 0 && this.getTablero().size() > k && this.getTablero().get(k).size() > j) {
+    	            this.getTablero().get(i).get(j).setColor(this.getTablero().get(k).get(j).getColor());
+    	            this.getTablero().get(k).get(j).setColor(' ');
+    	        }
+    	    }
+    	}
+
+    	return this;
+    	/*int filas = this.getTablero().size();
+    	if (filas == 0) {
+    	    // La lista está vacía, no hay nada que hacer
+    	    return this; // O devolver una nueva instancia de Tablero vacía, según tus necesidades
+    	}
+    	int columnas = this.getTablero().get(0).size();
+    	int filasborradas = tryRemoveFilaEnBlanco(this, filas, columnas);
+    	filas = filas - filasborradas;
         ///////////////////
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 // System.out.println(tablero.get(i).get(j).color);
-                if (tablero.get(i).get(j).color!=' ') {
+                if (this.getTablero().get(i).get(j).color!=' ') {
                     continue;
                 }
                 int k = i;
-                while (k >= 0 && tablero.get(k).get(j).getColor() == ' ') {
+                while (k >= 0 && this.getTablero().get(k).get(j).getColor() == ' ') {
                     k--;
                 }
-                // Si se encontró una casilla con letra en la misma columna, intercambiar valores
+                // Si se encontrÃ³ una casilla con letra en la misma columna, intercambiar valores
                 if (k >= 0) {
-                    tablero.get(i).get(j).setColor(tablero.get(k).get(j).getColor());
-                    tablero.get(k).get(j).setColor(' ');
+                    this.getTablero().get(i).get(j).setColor(this.getTablero().get(k).get(j).getColor());
+                    this.getTablero().get(k).get(j).setColor(' ');
                 }
                 
             }
@@ -235,10 +308,10 @@ public class Tablero {
         
         //tryRemoveFilaEnBlanco(tablero, filas, columnas);
         // 
-        return tablero;
+        return this;*/
     }
 
-    private static int tryRemoveFilaEnBlanco(ArrayList<ArrayList<Ficha>> tablero, int filas, int columnas) {
+    private static int tryRemoveFilaEnBlanco(Tablero tablero, int filas, int columnas) {
         boolean filaEnBlanco;
         int filasBorradas=0;
         //recorremos filas, si toda una fila esta en blanco, la eliminamos
@@ -246,7 +319,7 @@ public class Tablero {
             int count = 0;
             filaEnBlanco = false;
             for (int j = 0; j < columnas; j++) {
-                if (tablero.get(i).get(j).color==' ') {
+                if (tablero.getTablero().get(i).get(j).color==' ') {
                     count++;
                     if (j==columnas-1 && count == columnas) {
                         filaEnBlanco=true;
@@ -254,7 +327,7 @@ public class Tablero {
                 }
                 if (filaEnBlanco) {
                     for (int i2 = 0; i2 < columnas; i2++) {
-                        tablero.get(i).remove(0);
+                        tablero.getTablero().get(i).remove(0);
                     }
                     
                 }
@@ -262,8 +335,8 @@ public class Tablero {
         }
         //recorremos otra vez buscando los arrays vacios, y los eliminamos
         for (int i = filas-1; i > 0; i--) {
-            if (tablero.get(i).isEmpty()) {
-                tablero.remove(i);
+            if (tablero.getTablero().get(i).isEmpty()) {
+                tablero.getTablero().remove(i);
                 filasBorradas++;
             }
         }
@@ -274,21 +347,21 @@ public class Tablero {
     public void imprimirTablero() {
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
-                System.out.print(tablero.get(i).get(j).getColor()); // Puedes ajustar la forma de impresión según tus necesidades
+                System.out.print(this.tablero.get(i).get(j).getColor()); // Puedes ajustar la forma de impresiÃ³n segÃºn tus necesidades
             }
-            System.out.println(); // Nueva línea después de cada fila
+            System.out.println(); // Nueva lÃ­nea despuÃ©s de cada fila
         }
     }
 
-    private void aplicarMovimientos(ArrayList<Movimiento> movimientos) {
-        for (Movimiento movimiento : movimientos) {
-            System.out.println("Movimiento " + movimiento.getCoordenadas() + ": eliminó " + movimiento.numFichas
+    private void aplicarMovimientos(Movimientos movimientos) {
+        for (Movimiento movimiento : movimientos.getListaMovimientos()) {
+            System.out.println("Movimiento " + movimiento.getCoordenadas() + ": eliminÃ³ " + movimiento.numFichas
                     + " fichas de color " + movimiento.color + " y obtuvo " + movimiento.getPuntuacion() + " puntos.");
         }
-        System.out.println("Puntuación final: " + calcularPuntuacionTotal(movimientos) + ", quedando 0 fichas.");
+        System.out.println("PuntuaciÃ³n final: " + calcularPuntuacionTotal(movimientos.getListaMovimientos()) + ", quedando 0 fichas.");
     }
 
-    private int calcularPuntuacionTotal(ArrayList<Movimiento> movimientos) {
+    public int calcularPuntuacionTotal(ArrayList<Movimiento> movimientos) {
         int puntuacionTotal = 0;
         for (Movimiento movimiento : movimientos) {
             puntuacionTotal += movimiento.getPuntuacion();
