@@ -3,7 +3,16 @@ import java.util.List;
 
 
 public class Movimientos {
-    private List<Movimiento> listaMovimientos;
+    public ArrayList<Movimiento> getListaMovimientos() {
+        return listaMovimientos;
+    }
+
+
+    public void setListaMovimientos(ArrayList<Movimiento> listaMovimientos) {
+        this.listaMovimientos = listaMovimientos;
+    }
+
+    private ArrayList<Movimiento> listaMovimientos;
 
     public Movimientos() {
         this.listaMovimientos = new ArrayList<>();
@@ -16,7 +25,7 @@ public class Movimientos {
     }
 
     public void eliminarMovimiento(int fila, int columna, int numFichas, char color, int puntuacion){
-        List<Movimiento> auxiliar = new ArrayList<>();
+        ArrayList<Movimiento> auxiliar = new ArrayList<>();
         for(Movimiento movimiento : listaMovimientos){
             if(!(movimiento.fila == fila && movimiento.columna == columna && movimiento.numFichas == numFichas && movimiento.color == color && movimiento.puntuacion == puntuacion)){
                 auxiliar.add(movimiento);
@@ -38,6 +47,13 @@ public class Movimientos {
                 }
             }
         }
-    }    
-    
+    }
+
+
+	public void add(ArrayList<int[]> grupo) {
+		// TODO Auto-generated method stub
+		
+		
+	}    
 }
+    
