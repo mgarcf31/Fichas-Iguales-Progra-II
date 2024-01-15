@@ -33,7 +33,7 @@ public class Movimiento implements Comparable<Movimiento> {
         }
 
         public String getCoordenadas() {
-            return "(" + fila + ", " + columna + ")";
+            return "(" + (fila +1 )+ ", " + (columna +1 )+ ")";
         }
 
         public int getPuntuacion() {
