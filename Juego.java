@@ -5,7 +5,6 @@ public class Juego {
     public Juego(Tablero tablero) {
     	this.tablero = tablero; 
     }
-    
     public void resuelveTablero(Tablero tablero, ArrayList<Tablero> tableros) {
         ArrayList<ArrayList<int[]>> movsPosibles = tablero.getMovsPosibles();
         for (ArrayList<int[]> movs : movsPosibles) {
@@ -25,7 +24,7 @@ public class Juego {
                 resuelveTablero(copiaTablero, tableros);
             }
         }
-        // Mover la aplicación de movimientos fuera del bucle para evitar impresiones múltiples
+        // Mover la aplicaci�n de movimientos fuera del bucle para evitar impresiones m�ltiples
         aplicarMovimientos(tablero);
     }
 	public Tablero getTablero() {
@@ -38,10 +37,10 @@ public class Juego {
 	private void aplicarMovimientos(Tablero tablero) {
 	    Movimientos movimientos = tablero.getMovimientos();
 	    for (Movimiento movimiento : movimientos.getListaMovimientos()) {
-	        System.out.println("Movimiento " + (movimiento.getCoordenadas()) + ": eliminó " + movimiento.numFichas
+	        System.out.println("Movimiento " + (movimiento.getCoordenadas()) + ": elimin� " + movimiento.numFichas
 	                + " fichas de color " + movimiento.color + " y obtuvo " + (movimiento.numFichas - 2)*(movimiento.numFichas - 2) + " puntos.");
 	    }
-	    System.out.println("Puntuación final: " + tablero.calcularPuntuacionTotal(movimientos.getListaMovimientos()) + ", quedando 0 fichas.");
+	    System.out.println("Puntuaci�n final: " + tablero.calcularPuntuacionTotal(movimientos.getListaMovimientos()) + ", quedando 0 fichas.");
 	}
 	
 }
